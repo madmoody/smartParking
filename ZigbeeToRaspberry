@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <wiringPi.h>
+#include <wiringSerial.h>
+
+#define SERIAL_PORT "/dev/serial0"  // Replace with the correct serial port path
+#define BAUD_RATE 9600              // Adjust the baud rate based on your Zigbee module's configuration
+
+int main() {
+    int fd;
+
+    if (wiringPiSetup() == -1) {
+        printf("Unable to initialize wiringPi.\n");
+        return 1;
+    }
+
+    // Open the serial port
+    if ((fd = serialOpen(SERIAL_PORT, BAUD_RATE)) < 0) {
+        printf("Unable to open serial device: %s\n", SERIAL_PORT);
+        return 1;
+    }
+
+    printf("Serial port %s configured at %d baud.\n", SERIAL_PORT, BAUD_RATE);
+
+    while (1) {
+        if (serialDataAvail(fd) > 0) {
+            char data = serialGetchar(fd);
+            putchar(data);  // Print the received data to the console
+        }
+    }
+
+    return 0;
+}
