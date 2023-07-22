@@ -26,12 +26,14 @@ void loop() {
   
   // Calculate the distance in centimeters
   distance_cm = duration * 0.034 / 2;
-  zigbeeSerial.write(distance_cm);
+  
   // Print the measured distance to the Serial Monitor
   Serial.print("Distance: ");
   Serial.print(distance_cm);
   Serial.println(" cm");
-  
+  if(distance_cm > 2){
+    zigbeeSerial.write('1');
+  }
   // Add a delay between measurements
   delay(1000);
 }
